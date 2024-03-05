@@ -5,19 +5,24 @@
 
 using std::vector;
 
-float arctan(float& angle)
+double round_(const double& num, const int n_places)
+{
+    return round(num * pow(10, n_places)) / pow(10, n_places);
+}
+
+double arctan(double& angle)
 {
     return std::atan(angle);
 }
 
-float square(float& num)
+double square(double& num)
 {
     return num * num;
 }
 
-float trapz(const std::vector<float>& y, float dx)
+double trapz(const std::vector<double>& y, double dx)
 {
-    float integral = 0.0;
+    double integral = 0.0;
     for (size_t i = 1; i < y.size(); ++i)
     {
         integral += 0.5 * dx * (y[i] + y[i - 1]);
@@ -25,9 +30,9 @@ float trapz(const std::vector<float>& y, float dx)
     return integral;
 }
 
-float trapz(const std::vector<float>& y, const std::vector<float> x)
+double trapz(const vector<double>& y, const vector<double> x)
 {
-    float integral = 0.0f;
+    double integral = 0.0f;
     for (size_t i = 1; i < y.size(); ++i) {
         //std::cout << "x[i]: " << x[i] << ", x[i-1]: " << x[i - 1] << ", y[i]: " << y[i] << ", y[i-1]: " << y[i - 1] << std::endl;
         integral += (x[i] - x[i - 1]) * (y[i] + y[i - 1]);
@@ -35,37 +40,54 @@ float trapz(const std::vector<float>& y, const std::vector<float> x)
     return integral * 0.5;
 }
 
-float h1_ig(const float L_ig, const float LHS, float mu, float alpha)
+double trapz(const vector<vector<double>>& y, int second_index, vector<double>& x)
+{
+    double integral = 0.0f;
+    for (size_t i = 1; i < y.size(); ++i) {
+        //std::cout << "x[i]: " << x[i] << ", x[i-1]: " << x[i - 1] << ", y[i]: " << y[i] << ", y[i-1]: " << y[i - 1] << std::endl;
+        integral += (x[i] - x[i - 1]) * (y[i][second_index] + y[i - 1][second_index]);
+    }
+    return integral * 0.5;
+}
+
+double h1_ig(const double L_ig, const double LHS, double mu, double alpha)
 {
     return LHS - 2 * L_ig * sqrt(pow(mu, 2) + pow(mu * tan(abs(alpha)) + L_ig, 2));
 }
 
-float h2_ig(const float& L_ig, const float& LHS, const float& mu, const float& alpha)
+double h2_ig(const double& L_ig, const double& LHS, const double& mu, const double& alpha)
 {
-    const float term2 = sqrt(pow(mu, 2) + pow(mu * tan(abs(alpha)) + L_ig, 2));
-    const float diff = - (2 * term2 + (2 * L_ig * (mu * tan(abs(alpha)) + L_ig) / term2));
+    const double term2 = sqrt(pow(mu, 2) + pow(mu * tan(abs(alpha)) + L_ig, 2));
+    const double diff = - (2 * term2 + (2 * L_ig * (mu * tan(abs(alpha)) + L_ig) / term2));
     return diff;
 }
 
-float h1_i(const float& L_i, const float& L_ig_calc, const float& mu, const float& angle, const float& radius, const float& R_tip)
+double h1_i(const double& L_i, const double& L_ig_calc, const double& mu, const double& angle, const double& radius, const double& R_tip)
 {
-    const float LHS = (L_i) / (L_ig_calc);
-    const float RHS = 1 + ((1.333 * mu) / (1.2 * (L_i + L_ig_calc) + mu)) * ((radius * cos(angle)) / R_tip);
+    const double LHS = (L_i) / (L_ig_calc);
+    const double RHS = 1 + ((1.333 * mu) / (1.2 * (L_i + L_ig_calc) + mu)) * ((radius * cos(angle)) / R_tip);
     return LHS - RHS;
 }
 
-float h2_i(const float& L_i, const float& L_ig_calc, const float& mu, const float& angle, const float& radius, const float& R_tip)
+double h2_i(const double& L_i, const double& L_ig_calc, const double& mu, const double& angle, const double& radius, const double& R_tip)
 {
     return (1 / L_ig_calc) + ((1.333 * 1.2 * mu / pow(1.2 * (L_i + L_ig_calc) + mu, 2)) * radius * cos(angle) / R_tip);
 }
 
-vector<float> elementWiseMul(const vector<float>& a, const vector<float>& b)
+double sumVecElem(const vector<double>& vec)
+{
+    double sum = 0.0f;
+    for (double el : vec) sum += el;
+    return sum;
+}
+
+vector<double> elementWiseMul(const vector<double>& a, const vector<double>& b)
 {
     if (a.size() != b.size())
     {
         return {};
     }
-    vector<float> prod;
+    vector<double> prod;
     for (int i = 0; i < a.size(); i++)
     {
         prod.push_back(a[i] * b[i]);
@@ -73,9 +95,9 @@ vector<float> elementWiseMul(const vector<float>& a, const vector<float>& b)
     return prod;
 }
 
-vector<float> linspace(float start, float end, int num) {
-    vector<float> result(num);
-    float step = (end - start) / (num - 1);
+vector<double> linspace(double start, double end, int num) {
+    vector<double> result(num);
+    double step = (end - start) / (num - 1);
 
     for (int i = 0; i < num; ++i) {
         result[i] = start + i * step;
@@ -84,13 +106,13 @@ vector<float> linspace(float start, float end, int num) {
     return result;
 }
 
-vector<float> vectorAdd(const vector<float>& a, const vector<float>& b)
+vector<double> vectorAdd(const vector<double>& a, const vector<double>& b)
 {
     if (a.size() != b.size())
     {
         return {};
     }
-    vector<float> sum;
+    vector<double> sum;
     for (int i = 0; i < a.size(); i++)
     {
         sum.push_back(a[i] - b[i]);
@@ -98,13 +120,13 @@ vector<float> vectorAdd(const vector<float>& a, const vector<float>& b)
     return sum;
 }
 
-vector<float> vectorSub(vector<float>& a, vector<float>& b)
+vector<double> vectorSub(vector<double>& a, vector<double>& b)
 {
     if (a.size() != b.size())
     {
         return {};
     }
-    vector<float> diff(a.size(), 0);
+    vector<double> diff(a.size(), 0);
     for (int i = 0; i < a.size(); i++)
     {
         diff[i] = a[i] - b[i];
@@ -112,11 +134,22 @@ vector<float> vectorSub(vector<float>& a, vector<float>& b)
     return diff;
 }
 
-//vector<vector<float>> scalarMul(const float&k, vector<float)
+vector<vector<double>> vectorSub(vector<vector<double>>& a, vector<vector<double>>& b)
+{
+    if (a.size() != b.size()) return {};
+    vector<vector<double>> diff;
+    for (int i = 0; i < a.size(); i++)
+    {
+        diff.push_back(vectorSub(a[i], b[i]));
+    }
+    return diff;
+}
 
-//vector<float> scalarMul(const float& k, const vector<float>& vec)
+//vector<vector<double>> scalarMul(const double&k, vector<double)
+
+//vector<double> scalarMul(const double& k, const vector<double>& vec)
 //{
-//    vector<float> res;
+//    vector<double> res;
 //    for (auto& elem : vec)
 //    {
 //        res.push_back(k * elem);
@@ -124,13 +157,13 @@ vector<float> vectorSub(vector<float>& a, vector<float>& b)
 //    return res;
 //}
 
-vector<float> vectorDiv(vector<float>& dividend, vector<float>& divisor)
+vector<double> vectorDiv(vector<double>& dividend, vector<double>& divisor)
 {
     if (dividend.size() != divisor.size())
     {
         return {};
     }
-    vector<float> res(dividend.size(), 0);
+    vector<double> res(dividend.size(), 0);
     for (int i = 0; i < dividend.size(); i++)
     {
         res[i] = dividend[i] / divisor[i];
@@ -139,7 +172,7 @@ vector<float> vectorDiv(vector<float>& dividend, vector<float>& divisor)
 }
 
 template<typename T>
-vector<T> scalarMul(const float& k, const vector<T>& vec)
+vector<T> scalarMul(const double& k, const vector<T>& vec)
 {
     std::vector<T> res;
     for (const auto& elem : vec)
@@ -154,9 +187,9 @@ vector<T> scalarMul(const float& k, const vector<T>& vec)
     return res;
 }
 
-vector<float> scalarAdd(const float& k, const vector<float>& vec)
+vector<double> scalarAdd(const double& k, const vector<double>& vec)
 {
-    vector<float> res;
+    vector<double> res;
     for (auto& elem : vec)
     {
         res.push_back(k + elem);
@@ -164,10 +197,10 @@ vector<float> scalarAdd(const float& k, const vector<float>& vec)
     return res;
 }
 
-std::pair<float, float> rotate(float x, float y, float theta)
+std::pair<double, double> rotate(double x, double y, double theta)
 {
-    const float x_ = x * std::cos(theta) - y * std::sin(theta);
-    const float y_ = x * std::sin(theta) + y * std::cos(theta);
+    const double x_ = x * std::cos(theta) - y * std::sin(theta);
+    const double y_ = x * std::sin(theta) + y * std::cos(theta);
     return { x_, y_ };
 }
 
