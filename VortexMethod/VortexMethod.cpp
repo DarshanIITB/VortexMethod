@@ -15,80 +15,80 @@
 
 using std::vector, std::pow, std::sqrt, std::cout;
 
-const double rho = 1.225f;
+const float rho = 1.225f;
 
-const int span_sections = 10; // number of points used per blade
+const int span_sections = 3; // number of points used per blade
 const int N = 24; // number if turns in one rotation
 const int NR = 7; // number of rotations
 const int NR_F = 2;
 const int FAR_FIELD_CUTOFF = (NR - NR_F) * N;
-const double dpsi_d = (360 / N);
-const double mu = 0.0f;
+const float dpsi_d = (360 / N);
+const float mu = 0.0f;
 
-const double alpha_d = 0;
-const double alpha = alpha_d * (M_PI / 180);
-double alpha_p = -alpha;
+const float alpha_d = 0;
+const float alpha = alpha_d * (M_PI / 180);
+float alpha_p = -alpha;
 
-const double RPM = 383.0f; // rpm at cruise
-const double OMEGA = 2 * M_PI * RPM / 60;
+const float RPM = 383.0f; // rpm at cruise
+const float OMEGA = 2 * M_PI * RPM / 60;
 
-const double a = 5.75; // lift curve slope per radian from literature
-const double Cd0 = 0.022;  // co - efficient of drag from literature
+const float a = 5.75; // lift curve slope per radian from literature
+const float Cd0 = 0.022;  // co - efficient of drag from literature
 
-const double Vv = 0.0f; // tip path plane in radians
+const float Vv = 0.0f; // tip path plane in radians
 
-const double R_tip = 5.5f;
-const double u_inf = mu * (OMEGA * R_tip) / cos(alpha); // this is Y direction
-const double v_inf = 0; // this is X direction
-const double w_inf = 0 - u_inf * sin(alpha) - Vv;
-vector<double>V_vec = { v_inf, u_inf, w_inf };
+const float R_tip = 5.5f;
+const float u_inf = mu * (OMEGA * R_tip) / cos(alpha); // this is Y direction
+const float v_inf = 0; // this is X direction
+const float w_inf = 0 - u_inf * sin(alpha) - Vv;
+vector<float>V_vec = { v_inf, u_inf, w_inf };
 
-const double R_hub = 0.1 * R_tip;
-vector<double> radii = linspace(R_hub, R_tip, span_sections);
-const double chord_at_hub = 0.325;
-const double taper_ratio = 1.0f;
-const double chord_at_tip = chord_at_hub * taper_ratio;
-const double taper_slope = (chord_at_tip - chord_at_hub) / (R_tip - R_hub);
-const double chord_at_root = chord_at_hub - taper_slope * R_hub;
-vector<double> chord = scalarAdd(chord_at_root, scalarMul(taper_slope, radii));
+const float R_hub = 0.1 * R_tip;
+vector<float> radii = linspace(R_hub, R_tip, span_sections);
+const float chord_at_hub = 0.325;
+const float taper_ratio = 1.0f;
+const float chord_at_tip = chord_at_hub * taper_ratio;
+const float taper_slope = (chord_at_tip - chord_at_hub) / (R_tip - R_hub);
+const float chord_at_root = chord_at_hub - taper_slope * R_hub;
+vector<float> chord = scalarAdd(chord_at_root, scalarMul(taper_slope, radii));
 
 const int N_BLADES = 2;
 const int N_ROTORS = 1;
 const int BLADES_PER_ROTOR = N_BLADES / N_ROTORS;
 
-const double x_displacement = 1.5 * R_tip;
-const double y_displacement = 0 * R_tip;
-const double z_displacement = 0.2 * R_tip;
+const float x_displacement = 1.5 * R_tip;
+const float y_displacement = 0 * R_tip;
+const float z_displacement = 0.2 * R_tip;
 
-const double d = sqrt(pow(x_displacement, 2) + pow(y_displacement, 2));
+const float d = sqrt(pow(x_displacement, 2) + pow(y_displacement, 2));
 
-const double OVERLAP_AREA = 2 * pow(R_tip, 2) * std::acos(d / (2 * R_tip)) - 0.5 * sqrt(4 * pow(R_tip, 2) - pow(d, 2));
-const double DISC_AREA = (N_ROTORS > 1) ? M_PI * pow(R_tip, 2) * N_ROTORS - OVERLAP_AREA : M_PI * pow(R_tip, 2) * N_ROTORS;
+const float OVERLAP_AREA = 2 * pow(R_tip, 2) * std::acos(d / (2 * R_tip)) - 0.5 * sqrt(4 * pow(R_tip, 2) - pow(d, 2));
+const float DISC_AREA = (N_ROTORS > 1) ? M_PI * pow(R_tip, 2) * N_ROTORS - OVERLAP_AREA : M_PI * pow(R_tip, 2) * N_ROTORS;
 
-const double dpsi = dpsi_d * (M_PI / 180);
-const double NT = (NR * (360)) / dpsi_d;
+const float dpsi = dpsi_d * (M_PI / 180);
+const float NT = (NR * (360)) / dpsi_d;
 const int JM = int(NT);
 
-const double alp = 1.2;
-const double K_visc = 0.000015;
-const double del_s = 1000;
+const float alp = 1.2;
+const float K_visc = 0.000015;
+const float del_s = 1000;
 
-const double THETA_TIP = 2.0f;
-const double THETA_HUB = 12.0f;
-const double F = (THETA_TIP - THETA_HUB) / (R_tip - R_hub);
-const double E = THETA_HUB - F * R_hub;
-const double lc = Vv / (OMEGA * R_tip);
+const float THETA_TIP = 2.0f;
+const float THETA_HUB = 12.0f;
+const float F = (THETA_TIP - THETA_HUB) / (R_tip - R_hub);
+const float E = THETA_HUB - F * R_hub;
+const float lc = Vv / (OMEGA * R_tip);
 
-const double blade_twist = (THETA_TIP - THETA_HUB) * (M_PI / 180);
+const float blade_twist = (THETA_TIP - THETA_HUB) * (M_PI / 180);
 
-const double h_by_r = 0.0f; // for ground effect
+const float h_by_r = 0.0f; // for ground effect
 
-vector<double> theta = scalarAdd(E * M_PI / 180, (scalarMul(F * M_PI / 180, radii)));
-vector<double> solidity = scalarMul(N_BLADES/(M_PI * R_tip), chord);
+vector<float> theta = scalarAdd(E * M_PI / 180, (scalarMul(F * M_PI / 180, radii)));
+vector<float> solidity = scalarMul(N_BLADES/(M_PI * R_tip), chord);
 
-const int MAX_ITERS_ALLOWED = 50;
+const int MAX_ITERS_ALLOWED = 25;
 
-vector<vector<double>> bsl_2(vector<vector<vector<vector<double>>>>& positions, vector<vector<vector<vector<double>>>>& trail_circulation, int tc_index, int blade_index, int span_index, vector <vector< double >>& v_ind)
+vector<vector<float>> bsl_2(vector<vector<vector<vector<float>>>>& positions, vector<vector<vector<vector<float>>>>& trail_circulation, int tc_index, int blade_index, int span_index, vector <vector< float >>& v_ind)
 {
     for (int j = 0; j < FAR_FIELD_CUTOFF; j++)
     {
@@ -101,42 +101,43 @@ vector<vector<double>> bsl_2(vector<vector<vector<vector<double>>>>& positions, 
             {
                 for (int k = 0; k < JM - 1; k++)
                 {
-                    vector<double> v_ind_c = vector<double>(3, 0.0f);
+                    vector<float> v_ind_c = vector<float>(3, 0.0f);
                     if (k != j)
                     {
-                        const double d_gamma = trail_circulation[k][i][blade_index][tc_index] - trail_circulation[k + 1][i][blade_index][tc_index];
+                        /*const float d_gamma = trail_circulation[k][i][blade_index][tc_index] - trail_circulation[k + 1][i][blade_index][tc_index];*/
+                        const float d_gamma = trail_circulation[k][i][blade_index][tc_index];
 
-                        const double xa = positions[k][i][0][blade_index];
-                        const double xb = positions[k+1][i][0][blade_index];
-                        const double ya = positions[k][i][1][blade_index];
-                        const double yb = positions[k+1][i][1][blade_index];
-                        const double za = positions[k][i][2][blade_index];
-                        const double zb = positions[k+1][i][2][blade_index];
+                        const float xa = positions[k][i][0][blade_index];
+                        const float xb = positions[k+1][i][0][blade_index];
+                        const float ya = positions[k][i][1][blade_index];
+                        const float yb = positions[k+1][i][1][blade_index];
+                        const float za = positions[k][i][2][blade_index];
+                        const float zb = positions[k+1][i][2][blade_index];
 
                         // calculating differences for optimization
-                        const double xb_minus_xa = xb - xa;
-                        const double yb_minus_ya = yb - ya;
-                        const double zb_minus_za = zb - za;
+                        const float xb_minus_xa = xb - xa;
+                        const float yb_minus_ya = yb - ya;
+                        const float zb_minus_za = zb - za;
                         
-                        const double xc_minus_xb = xc - xb;
-                        const double yc_minus_yb = yc - yb;
-                        const double zc_minus_zb = zc - zb;
+                        const float xc_minus_xb = xc - xb;
+                        const float yc_minus_yb = yc - yb;
+                        const float zc_minus_zb = zc - zb;
 
                         // distance b/w A and B
-                        const double L = sqrt(pow(xb_minus_xa, 2) + pow(yb_minus_ya, 2) + pow(zb_minus_za, 2));
+                        const float L = sqrt(pow(xb_minus_xa, 2) + pow(yb_minus_ya, 2) + pow(zb_minus_za, 2));
 
-                        const double cutoff = sqrt(pow(0.25f * L, 4) + 4 * alp * del_s * K_visc * ((k + 1) * dpsi / OMEGA));
+                        const float cutoff = sqrt(pow(0.25f * L, 4) + 4 * alp * del_s * K_visc * ((k + 1) * dpsi / OMEGA));
                         // distance b/w A and C
-                        const double r1 = sqrt(pow(xc - xa, 2) + pow(yc - ya, 2) + pow(zc - za, 2)) + cutoff;
+                        const float r1 = sqrt(pow(xc - xa, 2) + pow(yc - ya, 2) + pow(zc - za, 2)) + cutoff;
 
                         // distance b/w B and C
-                        const double r2 = sqrt(pow(xc_minus_xb, 2) + pow(yc_minus_yb, 2) + pow(zc_minus_zb, 2)) + cutoff;
+                        const float r2 = sqrt(pow(xc_minus_xb, 2) + pow(yc_minus_yb, 2) + pow(zc_minus_zb, 2)) + cutoff;
 
-                        const double multiplier = d_gamma * (r1 + r2) / (2 * M_PI * r1 * r2 * (pow(r1 + r2, 2) - pow(L, 2)));
+                        const float multiplier = d_gamma * (r1 + r2) / (2 * M_PI * r1 * r2 * (pow(r1 + r2, 2) - pow(L, 2)));
 
-                        double u_bs = multiplier * (zc_minus_zb * yb_minus_ya - yc_minus_yb * zc_minus_zb);
-                        double v_bs = multiplier * (xc_minus_xb * zb_minus_za - zc_minus_zb * xb_minus_xa);
-                        double w_bs = multiplier * (yc_minus_yb * xb_minus_xa - xc_minus_xb * yb_minus_ya);
+                        float u_bs = multiplier * (zc_minus_zb * yb_minus_ya - yc_minus_yb * zc_minus_zb);
+                        float v_bs = multiplier * (xc_minus_xb * zb_minus_za - zc_minus_zb * xb_minus_xa);
+                        float w_bs = multiplier * (yc_minus_yb * xb_minus_xa - xc_minus_xb * yb_minus_ya);
 
                         if (blade_index + 1 > BLADES_PER_ROTOR)
                         {
@@ -164,12 +165,12 @@ vector<vector<double>> bsl_2(vector<vector<vector<vector<double>>>>& positions, 
     return v_ind;
 }
 
-vector<double> bsl_perf(vector<vector<vector<vector<double>>>>& positions, vector<vector<vector<vector<double>>>>& trail_circulation, int tc_index, int blade_index, int span_index, vector<double>& v_ind)
+vector<float> bsl_perf(vector<vector<vector<vector<float>>>>& positions, vector<vector<vector<vector<float>>>>& trail_circulation, int tc_index, int bl, int span_index, vector<float>& v_ind)
 // not using shed circulation for now
 {
-    const int xc = positions[0][span_index][0][blade_index];
-    const int yc = positions[0][span_index][1][blade_index];
-    const int zc = positions[0][span_index][2][blade_index];
+    const int xc = positions[0][span_index][0][bl];
+    const int yc = positions[0][span_index][1][bl];
+    const int zc = positions[0][span_index][2][bl];
     for (int blade_index = 0; blade_index < N_BLADES; blade_index++)
     {
         for (int i = 0; i < span_sections; i++)
@@ -177,41 +178,43 @@ vector<double> bsl_perf(vector<vector<vector<vector<double>>>>& positions, vecto
             for (int k = 0; k < JM - 1; k++)
             {
                 // d_gamma should be the difference in the trail circulation
-                const double d_gamma = trail_circulation[k][i][blade_index][tc_index] - trail_circulation[k + 1][i][blade_index][tc_index];
+                //const float d_gamma = trail_circulation[k][i][blade_index][tc_index] - trail_circulation[k + 1][i][blade_index][tc_index];
 
-                const double xa = positions[k][i][0][blade_index];
-                const double xb = positions[k + 1][i][0][blade_index];
-                const double ya = positions[k][i][1][blade_index];
-                const double yb = positions[k + 1][i][1][blade_index];
-                const double za = positions[k][i][2][blade_index];
-                const double zb = positions[k + 1][i][2][blade_index];
+                const float d_gamma = trail_circulation[k][i][blade_index][tc_index];
 
-                vector<double> v_ind_c = vector<double>(3, 0.0f);
+                const float xa = positions[k][i][0][blade_index];
+                const float xb = positions[k + 1][i][0][blade_index];
+                const float ya = positions[k][i][1][blade_index];
+                const float yb = positions[k + 1][i][1][blade_index];
+                const float za = positions[k][i][2][blade_index];
+                const float zb = positions[k + 1][i][2][blade_index];
+
+                vector<float> v_ind_c = vector<float>(3, 0.0f);
 
                 // calculating differences for optimization
-                const double xb_minus_xa = xb - xa;
-                const double yb_minus_ya = yb - ya;
-                const double zb_minus_za = zb - za;
+                const float xb_minus_xa = xb - xa;
+                const float yb_minus_ya = yb - ya;
+                const float zb_minus_za = zb - za;
 
-                const double xc_minus_xb = xc - xb;
-                const double yc_minus_yb = yc - yb;
-                const double zc_minus_zb = zc - zb;
+                const float xc_minus_xb = xc - xb;
+                const float yc_minus_yb = yc - yb;
+                const float zc_minus_zb = zc - zb;
 
                 // distance b/w A and B
-                const double L = sqrt(pow(xb_minus_xa, 2) + pow(yb_minus_ya, 2) + pow(zb_minus_za, 2));
+                const float L = sqrt(pow(xb_minus_xa, 2) + pow(yb_minus_ya, 2) + pow(zb_minus_za, 2));
 
-                const double cutoff = sqrt(pow(0.25f * L, 4) + 4 * alp * del_s * K_visc * ((k + 1) * dpsi / OMEGA));
+                const float cutoff = sqrt(pow(0.25f * L, 4) + 4 * alp * del_s * K_visc * ((k + 1) * dpsi / OMEGA));
                 // distance b/w A and C
-                const double r1 = sqrt(pow(xc - xa, 2) + pow(yc - ya, 2) + pow(zc - za, 2)) + cutoff;
+                const float r1 = sqrt(pow(xc - xa, 2) + pow(yc - ya, 2) + pow(zc - za, 2)) + cutoff;
 
                 // distance b/w B and C
-                const double r2 = sqrt(pow(xc_minus_xb, 2) + pow(yc_minus_yb, 2) + pow(zc_minus_zb, 2)) + cutoff;
+                const float r2 = sqrt(pow(xc_minus_xb, 2) + pow(yc_minus_yb, 2) + pow(zc_minus_zb, 2)) + cutoff;
 
-                const double multiplier = d_gamma * (r1 + r2) / (2 * M_PI * r1 * r2 * (pow(r1 + r2, 2) - pow(L, 2)));
+                const float multiplier = d_gamma * (r1 + r2) / (2 * M_PI * r1 * r2 * (pow(r1 + r2, 2) - pow(L, 2)));
 
-                double u_bs = multiplier * (zc_minus_zb * yb_minus_ya - yc_minus_yb * zc_minus_zb);
-                double v_bs = multiplier * (xc_minus_xb * zb_minus_za - zc_minus_zb * xb_minus_xa);
-                double w_bs = multiplier * (yc_minus_yb * xb_minus_xa - xc_minus_xb * yb_minus_ya);
+                float u_bs = multiplier * (zc_minus_zb * yb_minus_ya - yc_minus_yb * zb_minus_za);
+                float v_bs = multiplier * (xc_minus_xb * zb_minus_za - zc_minus_zb * xb_minus_xa);
+                float w_bs = multiplier * (yc_minus_yb * xb_minus_xa - xc_minus_xb * yb_minus_ya);
 
                 if (blade_index + 1 > BLADES_PER_ROTOR)
                 {
@@ -230,7 +233,7 @@ vector<double> bsl_perf(vector<vector<vector<vector<double>>>>& positions, vecto
     return v_ind;
 }
 
-//void save4DArray(const vector<vector<vector<vector<double>>>>& array, const char* filename) {
+//void save4DArray(const vector<vector<vector<vector<float>>>>& array, const char* filename) {
 //    std::ofstream file(filename, std::ios::binary);
 //    if (file.is_open()) {
 //        // Write dimensions
@@ -248,7 +251,7 @@ vector<double> bsl_perf(vector<vector<vector<vector<double>>>>& positions, vecto
 //            for (const auto& dim2_slice : dim1_slice) {
 //                for (const auto& dim3_slice : dim2_slice) {
 //                    for (const auto& row : dim3_slice) {
-//                        file.write(reinterpret_cast<const char*>(&row), dim4 * sizeof(double));
+//                        file.write(reinterpret_cast<const char*>(&row), dim4 * sizeof(float));
 //                    }
 //                }
 //            }
@@ -261,7 +264,7 @@ vector<double> bsl_perf(vector<vector<vector<vector<double>>>>& positions, vecto
 //    }
 //}
 
-//void save4DArray(const std::vector<std::vector<std::vector<std::vector<double>>>>& array, const char* filename) {
+//void save4DArray(const std::vector<std::vector<std::vector<std::vector<float>>>>& array, const char* filename) {
 //    std::ofstream file(filename, std::ios::binary);
 //    if (file.is_open()) {
 //        // Write magic number for npy format
@@ -287,7 +290,7 @@ vector<double> bsl_perf(vector<vector<vector<vector<double>>>>& positions, vecto
 //            for (const auto& dim2_slice : dim1_slice) {
 //                for (const auto& dim3_slice : dim2_slice) {
 //                    for (const auto& row : dim3_slice) {
-//                        file.write(reinterpret_cast<const char*>(&row), sizeof(double));
+//                        file.write(reinterpret_cast<const char*>(&row), sizeof(float));
 //                    }
 //                }
 //            }
@@ -300,9 +303,10 @@ vector<double> bsl_perf(vector<vector<vector<vector<double>>>>& positions, vecto
 //    }
 //}
 
-void saveData(vector<vector<vector<vector<double>>>>& array4D)
+void saveData(vector<vector<vector<vector<float>>>>& array4D, std::string filename)
 {
-    std::ofstream outfile("array4D.bin", std::ios::binary);
+    filename += ".bin";
+    std::ofstream outfile(filename, std::ios::binary);
 
     int dim1 = array4D.size();
     int dim2 = array4D.empty() ? 0 : array4D[0].size();
@@ -318,7 +322,7 @@ void saveData(vector<vector<vector<vector<double>>>>& array4D)
         for (const auto& twoD : threeD) {
             for (const auto& oneD : twoD) {
                 for (const auto& element : oneD) {
-                    outfile.write(reinterpret_cast<const char*>(&element), sizeof(double));
+                    outfile.write(reinterpret_cast<const char*>(&element), sizeof(float));
                 }
             }
         }
@@ -326,27 +330,27 @@ void saveData(vector<vector<vector<vector<double>>>>& array4D)
     outfile.close();
 }
 
-vector< vector<vector<vector<double>>>> HoverWake(double CT_input)
+vector< vector<vector<vector<float>>>> HoverWake(float CT_input)
 {
-    const double CT = CT_input / N_ROTORS;
-    const double A = 0.78;
-    const double lam = 0.145 + 27 * CT;
-    vector<vector<double>> Zv_array(JM, vector<double>(span_sections, 0));
-    vector<vector<vector<double>>> arrayX1(JM, vector<vector<double>>(span_sections, vector<double>(N_BLADES, 0)));
-    vector<vector<vector<double>>> arrayY1(JM, vector<vector<double>>(span_sections, vector<double>(N_BLADES, 0)));
-    vector<vector<vector<double>>> arrayZ1(JM, vector<vector<double>>(span_sections, vector<double>(N_BLADES, 0)));
+    const float CT = CT_input / N_ROTORS;
+    const float A = 0.78;
+    const float lam = 0.145 + 27 * CT;
+    vector<vector<float>> Zv_array(JM, vector<float>(span_sections, 0));
+    vector<vector<vector<float>>> arrayX1(JM, vector<vector<float>>(span_sections, vector<float>(N_BLADES, 0)));
+    vector<vector<vector<float>>> arrayY1(JM, vector<vector<float>>(span_sections, vector<float>(N_BLADES, 0)));
+    vector<vector<vector<float>>> arrayZ1(JM, vector<vector<float>>(span_sections, vector<float>(N_BLADES, 0)));
     for (int i = 0; i < span_sections; i++)
     {
         if (i < span_sections - 1)
         {
             for (int j = 0; j < JM; j++) // time loop
             {
-                const double psi = j * dpsi;
-                const double R_vortex = radii[i] * (A + (1 - A) * std::exp(-lam * psi));
-                const double chord_ = chord[i];
-                const double solidity_ = (BLADES_PER_ROTOR * chord_) / (M_PI * R_tip);
-                const double K1 = -2.2 * sqrt(0.5 * CT);
-                const double K2 = -2.7 * sqrt(0.5 * CT);
+                const float psi = j * dpsi;
+                const float R_vortex = radii[i] * (A + (1 - A) * std::exp(-lam * psi));
+                const float chord_ = chord[i];
+                const float solidity_ = (BLADES_PER_ROTOR * chord_) / (M_PI * R_tip);
+                const float K1 = -2.2 * sqrt(0.5 * CT);
+                const float K2 = -2.7 * sqrt(0.5 * CT);
                 if (psi <= (2 * M_PI / BLADES_PER_ROTOR))
                 {
                     Zv_array[j][i] = radii[i] * (K1 * psi);
@@ -359,7 +363,7 @@ vector< vector<vector<vector<double>>>> HoverWake(double CT_input)
                 {
                     if (bn < BLADES_PER_ROTOR)
                     {
-                        std::pair<double, double> new_coords = rotate(R_vortex, 0.0f, 1.0f * psi + (bn * 2 * M_PI / BLADES_PER_ROTOR));
+                        std::pair<float, float> new_coords = rotate(R_vortex, 0.0f, 1.0f * psi + (bn * 2 * M_PI / BLADES_PER_ROTOR));
                         arrayX1[j][i][bn] = new_coords.first;
                         arrayY1[j][i][bn] = new_coords.second;
                         for (int a = 0; a < JM; a++)
@@ -372,7 +376,7 @@ vector< vector<vector<vector<double>>>> HoverWake(double CT_input)
                     }
                     else
                     {
-                        std::pair<double, double> new_coords = rotate(R_vortex, 0.0f, 1.0f * psi + (bn * 2 * M_PI / BLADES_PER_ROTOR));
+                        std::pair<float, float> new_coords = rotate(R_vortex, 0.0f, 1.0f * psi + (bn * 2 * M_PI / BLADES_PER_ROTOR));
                         arrayX1[j][i][bn] = new_coords.first + x_displacement;
                         arrayY1[j][i][bn] = new_coords.second + y_displacement;
                         if (h_by_r == 0)
@@ -403,12 +407,12 @@ vector< vector<vector<vector<double>>>> HoverWake(double CT_input)
         {
             for (int j = 0; j < JM; j++) // time loop
             {
-                const double psi = j * dpsi;
-                const double R_vortex = radii[i] * (A + (1 - A) * std::exp(-lam * psi));
-                const double chord_ = chord[i];
-                const double solidity_ = (BLADES_PER_ROTOR * chord_) / (M_PI * R_tip);
-                const double K1 = -0.25 * ((CT / solidity_) + 0.001 * blade_twist * (180 / M_PI));
-                const double K2 = -(1.41 + 0.0141 * blade_twist * (180 / M_PI)) * sqrt(0.5 * CT);
+                const float psi = j * dpsi;
+                const float R_vortex = radii[i] * (A + (1 - A) * std::exp(-lam * psi));
+                const float chord_ = chord[i];
+                const float solidity_ = (BLADES_PER_ROTOR * chord_) / (M_PI * R_tip);
+                const float K1 = -0.25 * ((CT / solidity_) + 0.001 * blade_twist * (180 / M_PI));
+                const float K2 = -(1.41 + 0.0141 * blade_twist * (180 / M_PI)) * sqrt(0.5 * CT);
                 if (psi <= (2 * M_PI / BLADES_PER_ROTOR))
                 {
                     Zv_array[j][i] = radii[i] * (K1 * psi);
@@ -421,7 +425,7 @@ vector< vector<vector<vector<double>>>> HoverWake(double CT_input)
                 {
                     if (bn < BLADES_PER_ROTOR)
                     {
-                        std::pair<double, double> new_coords = rotate(R_vortex, 0.0f, 1.0f * psi + (bn * 2 * M_PI / BLADES_PER_ROTOR));
+                        std::pair<float, float> new_coords = rotate(R_vortex, 0.0f, 1.0f * psi + (bn * 2 * M_PI / BLADES_PER_ROTOR));
                         arrayX1[j][i][bn] = new_coords.first;
                         arrayY1[j][i][bn] = new_coords.second;
                         for (int a = 0; a < JM; a++)
@@ -434,7 +438,7 @@ vector< vector<vector<vector<double>>>> HoverWake(double CT_input)
                     }
                     else
                     {
-                        std::pair<double, double> new_coords = rotate(R_vortex, 0.0f, 1.0f * psi + (bn * 2 * M_PI / BLADES_PER_ROTOR));
+                        std::pair<float, float> new_coords = rotate(R_vortex, 0.0f, 1.0f * psi + (bn * 2 * M_PI / BLADES_PER_ROTOR));
                         arrayX1[j][i][bn] = new_coords.first;
                         arrayY1[j][i][bn] = new_coords.second;
                         if (h_by_r == 0)
@@ -462,13 +466,13 @@ vector< vector<vector<vector<double>>>> HoverWake(double CT_input)
             }
         }
     }
-    return { arrayX1, arrayY1, arrayZ1 };
+    return { arrayY1, arrayX1, arrayZ1 };
 }
 
-void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
+void EX2BMethod(const float& CT, vector<vector<float>>& circulation)
 {
-    vector<double> psi_array = linspace(0, 2 * M_PI, N);
-    vector<vector<double>>V_INF(JM, vector<double>(3, 0.0f));
+    vector<float> psi_array = linspace(0, 2 * M_PI, N);
+    vector<vector<float>>V_INF(JM, vector<float>(3, 0.0f));
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < JM; j++)
@@ -478,28 +482,39 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
     }
 
 
-    const double theta_1s = (0) * (M_PI / 180);  // theta_1s  in degrees at trim condition
-    const double theta_1c = (0) * (M_PI / 180);  // theta_1c  in degrees at trim condition
+    const float theta_1s = (0) * (M_PI / 180);  // theta_1s  in degrees at trim condition
+    const float theta_1c = (0) * (M_PI / 180);  // theta_1c  in degrees at trim condition
 
-    vector<vector<vector<vector<double>>>> positions_old(JM, vector<vector<vector<double>>>(span_sections, vector<vector<double>>(3, vector<double>(N_BLADES, 0))));
-    //vector<vector<vector<vector<double>>>> positions_old(N_BLADES, vector<vector<vector<double>>>(JM, vector<vector<double>>(span_sections, vector<double>(3, 0))));
-    vector<vector<vector<vector<double>>>> positions_new(JM, vector<vector<vector<double>>>(span_sections, vector<vector<double>>(3, vector<double>(N_BLADES, 0))));
-    vector<vector<vector<vector<double>>>> positions_pc(JM, vector<vector<vector<double>>>(span_sections, vector<vector<double>>(3, vector<double>(N_BLADES, 0))));
-    vector<vector<vector<vector<double>>>> blade_positions(JM, vector<vector<vector<double>>>(span_sections, vector<vector<double>>(3, vector<double>(N_BLADES, 0))));
-    vector<vector<vector<vector<double>>>> positions_compare(JM, vector<vector<vector<double>>>(span_sections, vector<vector<double>>(3, vector<double>(N_BLADES, 0))));
+    vector<vector<vector<vector<float>>>> positions_old(JM, vector<vector<vector<float>>>(span_sections, vector<vector<float>>(3, vector<float>(N_BLADES, 0))));
+    //vector<vector<vector<vector<float>>>> positions_old(N_BLADES, vector<vector<vector<float>>>(JM, vector<vector<float>>(span_sections, vector<float>(3, 0))));
+    vector<vector<vector<vector<float>>>> positions_new(JM, vector<vector<vector<float>>>(span_sections, vector<vector<float>>(3, vector<float>(N_BLADES, 0))));
+    vector<vector<vector<vector<float>>>> positions_pc(JM, vector<vector<vector<float>>>(span_sections, vector<vector<float>>(3, vector<float>(N_BLADES, 0))));
+    vector<vector<vector<vector<float>>>> blade_positions(JM, vector<vector<vector<float>>>(span_sections, vector<vector<float>>(3, vector<float>(N_BLADES, 0))));
+    vector<vector<vector<vector<float>>>> positions_compare(JM, vector<vector<vector<float>>>(span_sections, vector<vector<float>>(3, vector<float>(N_BLADES, 0))));
 
-    vector<double>Thrust_new(N_ROTORS, 0.0f);
-    vector<double>Induced_Power(N_ROTORS, 0.0f);
-    vector<double>Profile_Power(N_ROTORS, 0.0f);
-    vector<double>Power_new(N_ROTORS, 0.0f);
-    vector<double>Torque_new(N_ROTORS, 0.0f);
-    vector<double>OPM_new(N_ROTORS, 0.0f);
-    vector<double>ORM_new(N_ROTORS, 0.0f);
+    vector<float>Thrust_new(N_ROTORS, 0.0f);
+    vector<float>Induced_Power(N_ROTORS, 0.0f);
+    vector<float>Profile_Power(N_ROTORS, 0.0f);
+    vector<float>Power_new(N_ROTORS, 0.0f);
+    vector<float>Torque_new(N_ROTORS, 0.0f);
+    vector<float>OPM_new(N_ROTORS, 0.0f);
+    vector<float>ORM_new(N_ROTORS, 0.0f);
 
-    vector<vector<vector<vector<double>>>> result = HoverWake(CT);
-    vector<vector<vector<double>>> array_Xprs = result[0];
-    vector<vector<vector<double>>> array_Yprs = result[1];
-    vector<vector<vector<double>>> array_Zprs = result[2];
+    vector<vector<vector<vector<float>>>> result = HoverWake(CT);
+    vector<vector<vector<float>>> array_Xprs = result[0];
+    vector<vector<vector<float>>> array_Yprs = result[1];
+    vector<vector<vector<float>>> array_Zprs = result[2];
+
+    /*for (int j = 0; j < JM; j++)
+    {
+        for (int i = 0; i < span_sections; i++)
+        {
+            std::pair<float, float> new_coords = rotate(array_Xprs[j][i][0], array_Yprs[j][i][0], -dpsi);
+            positions_compare[j][i][0][0] = new_coords.first;
+            positions_compare[j][i][1][0] = new_coords.second;
+            positions_compare[j][i][2][0] = array_Zprs[j][i][0];
+        }
+    }*/
 
     for (int j = 0; j < JM; j++)
     {
@@ -521,32 +536,32 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
         }
     }
     int C_psi = 0;
-    vector<double> RMS_arr;
-    vector<double> Power_arr_iter;
-    vector<double> Thrust_arr_iter;
-    double rms_change = 1;
+    vector<float> RMS_arr;
+    vector<float> Power_arr_iter;
+    vector<float> Thrust_arr_iter;
+    float rms_change = 1;
     int Rotation_count = 0;
-    double rotation = 0;
+    float rotation = 0;
     int count = 0;
     int az_index = 0;
     const int shed_index = 1;
-    const double dbeta_dt = 0;
-    const double beta = 0;
+    const float dbeta_dt = 0;
+    const float beta = 0;
 
-    vector<vector<double>> Azimuthal_dT_array(N, vector<double>(N_BLADES, 0.0f));
-    vector<vector<double>> Azimuthal_dOPi_array(N, vector<double>(N_BLADES, 0.0f));
-    vector<vector<double>> Azimuthal_dOPo_array(N, vector<double>(N_BLADES, 0.0f));
-    vector<vector<double>> Azimuthal_PM_array(N, vector<double>(N_BLADES, 0.0f));
-    vector<vector<double>> Azimuthal_RM_array(N, vector<double>(N_BLADES, 0.0f));
-    vector<vector<double>> Azimuthal_dOQo_array(N, vector<double>(N_BLADES, 0.0f));
-    vector<vector<double>> Azimuthal_dOQi_array(N, vector<double>(N_BLADES, 0.0f));
+    vector<vector<float>> Azimuthal_dT_array(N, vector<float>(N_BLADES, 0.0f));
+    vector<vector<float>> Azimuthal_dOPi_array(N, vector<float>(N_BLADES, 0.0f));
+    vector<vector<float>> Azimuthal_dOPo_array(N, vector<float>(N_BLADES, 0.0f));
+    vector<vector<float>> Azimuthal_PM_array(N, vector<float>(N_BLADES, 0.0f));
+    vector<vector<float>> Azimuthal_RM_array(N, vector<float>(N_BLADES, 0.0f));
+    vector<vector<float>> Azimuthal_dOQo_array(N, vector<float>(N_BLADES, 0.0f));
+    vector<vector<float>> Azimuthal_dOQi_array(N, vector<float>(N_BLADES, 0.0f));
 
-    vector<vector<vector<vector<double>>>> V_IND(JM, vector<vector<vector<double>>>(3, vector<vector<double>>(3, vector<double>(N_BLADES, 0.0f))));
-    vector<vector<vector<vector<double>>>> CirVM_array(JM+1, vector<vector<vector<double>>>(span_sections+1, vector<vector<double>>(N_BLADES, vector<double>(2, 0.0f))));
-    vector<vector<vector<vector<double>>>> Thrust_contours(JM, vector<vector<vector<double>>>(span_sections, vector<vector<double>>(N_BLADES, vector<double>(2, 0.0f))));
+    vector<vector<vector<vector<float>>>> V_IND(JM, vector<vector<vector<float>>>(3, vector<vector<float>>(3, vector<float>(N_BLADES, 0.0f))));
+    vector<vector<vector<vector<float>>>> CirVM_array(JM+1, vector<vector<vector<float>>>(span_sections+1, vector<vector<float>>(N_BLADES, vector<float>(2, 0.0f))));
+    vector<vector<vector<vector<float>>>> Thrust_contours(JM, vector<vector<vector<float>>>(span_sections, vector<vector<float>>(N_BLADES, vector<float>(2, 0.0f))));
 
-    vector<vector<vector<vector<double>>>> Shed_circulation(JM, vector<vector<vector<double>>>(span_sections+1, vector<vector<double>>(N_BLADES, vector<double>(2, 0.0f))));
-    vector<vector<vector<vector<double>>>> Trail_circulation(JM, vector<vector<vector<double>>>(span_sections+1, vector<vector<double>>(N_BLADES, vector<double>(2, 0.0f))));
+    vector<vector<vector<vector<float>>>> Shed_circulation(JM, vector<vector<vector<float>>>(span_sections+1, vector<vector<float>>(N_BLADES, vector<float>(2, 0.0f))));
+    vector<vector<vector<vector<float>>>> Trail_circulation(JM, vector<vector<vector<float>>>(span_sections+1, vector<vector<float>>(N_BLADES, vector<float>(2, 0.0f))));
 
     for (int bc = 0; bc < N_BLADES; bc++)
     {
@@ -566,8 +581,8 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
             Trail_circulation[j][i] = vectorSub(CirVM_array[j][i], CirVM_array[j][i + 1]);
         }
     }
-    vector<vector<vector<double>>> Blade_velocities(span_sections, vector<vector<double>>(3, vector<double>(N_BLADES, 0.0f)));
-    vector<vector<double>> Up_VM_arr(N, vector<double>(span_sections, 0.0f));
+    vector<vector<vector<float>>> Blade_velocities(span_sections, vector<vector<float>>(3, vector<float>(N_BLADES, 0.0f)));
+    vector<vector<float>> Up_VM_arr(N, vector<float>(span_sections, 0.0f));
     while (rms_change > 0.01)
     {
         //cout << "Iteration " << count;
@@ -575,27 +590,26 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
         rotation = rotation + dpsi * (180 / M_PI);
         //C_psi = C_psi + 1;
         C_psi++;
-        vector<vector<double>>Radial_dT_array(span_sections, vector<double>(N_BLADES, 0.0f));
-        vector<vector<double>>Radial_dOPi_array(span_sections, vector<double>(N_BLADES, 0.0f));
-        vector<vector<double>>Radial_dOPo_array(span_sections, vector<double>(N_BLADES, 0.0f));
-        vector<vector<double>>Radial_PM_array(span_sections, vector<double>(N_BLADES, 0.0f));
-        vector<vector<double>>Radial_RM_array(span_sections, vector<double>(N_BLADES, 0.0f));
-        vector<vector<double>>Radial_dOQo_array(span_sections, vector<double>(N_BLADES, 0.0f));
-        vector<vector<double>>Radial_dOQi_array(span_sections, vector<double>(N_BLADES, 0.0f));
+        vector<vector<float>>Radial_dT_array(span_sections, vector<float>(N_BLADES, 0.0f));
+        vector<vector<float>>Radial_dOPi_array(span_sections, vector<float>(N_BLADES, 0.0f));
+        vector<vector<float>>Radial_dOPo_array(span_sections, vector<float>(N_BLADES, 0.0f));
+        vector<vector<float>>Radial_PM_array(span_sections, vector<float>(N_BLADES, 0.0f));
+        vector<vector<float>>Radial_RM_array(span_sections, vector<float>(N_BLADES, 0.0f));
+        vector<vector<float>>Radial_dOQo_array(span_sections, vector<float>(N_BLADES, 0.0f));
+        vector<vector<float>>Radial_dOQi_array(span_sections, vector<float>(N_BLADES, 0.0f));
         for (int bl = 0; bl < N_BLADES; bl++)
         {
             for (int ir = 0; ir < span_sections; ir++)
             {
-                double psi, psi_p;
+                float psi, psi_p;
                 if (bl <= BLADES_PER_ROTOR)
                 {
-
                     //Here was the error
                     //alpha_p *= -alpha;
                     alpha_p = -alpha;
-                    psi = (1 * count * dpsi + ((bl) / BLADES_PER_ROTOR) * 2 * M_PI);
-                    psi_p = (-1 * count * dpsi + ((bl) / BLADES_PER_ROTOR) * 2 * M_PI);
-                    positions_new[0][ir][1][bl] = radii[ir] * ((cos(psi_p) * cos(beta)) + sin(beta) * sin(alpha_p));
+                    psi = (1 * count * dpsi + (bl / BLADES_PER_ROTOR) * 2 * M_PI);
+                    psi_p = (-1 * count * dpsi + (bl / BLADES_PER_ROTOR) * 2 * M_PI);
+                    positions_new[0][ir][1][bl] = radii[ir] * (cos(psi_p) * cos(beta) + sin(beta) * sin(alpha_p));
                     positions_new[0][ir][0][bl] = radii[ir] * (sin(psi_p) * cos(beta));
                     positions_new[0][ir][2][bl] = radii[ir] * (sin(beta) * cos(alpha_p) - cos(psi_p) * cos(beta) * sin(alpha_p)) + h_by_r * R_tip;
                 }
@@ -607,8 +621,8 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
                     positions_new[0][ir][0][bl] = 1 * y_displacement + radii[ir] * (sin(psi_p) * cos(beta));
                     positions_new[0][ir][2][bl] = array_Zprs[0][ir][bl] + radii[ir] * (sin(beta) * cos(alpha_p) - cos(psi_p) * cos(beta) * sin(alpha_p));
                 }
-                vector<vector<double>>V_ind_geometry(JM, vector<double>(3, 0.0f));
-                vector<vector<double>> res = bsl_2(positions_old, Trail_circulation, 0, bl, ir, V_ind_geometry);
+                vector<vector<float>>V_ind_geometry(JM, vector<float>(3, 0.0f));
+                vector<vector<float>> res = bsl_2(positions_old, Trail_circulation, 0, bl, ir, V_ind_geometry);
                 //cout << "res dimensions: (" << res.size() << ", " << res[0].size() << ")" << std::endl;
                 //cout << "V_ind dimensions: (" << V_IND.size() << ", " << V_IND[0].size() << ", " << V_IND[0][0].size() << ", " << V_IND[0][0][0].size() << ")" << std::endl;
                 for (int j = 0; j < JM; j++)
@@ -627,8 +641,8 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
                         positions_new[j][ir][k][bl] = positions_old[j - 1][ir][k][bl] + (dpsi / OMEGA) * (V_INF[j][k] + (1.0f / 3) * (V_IND[j][k][0][bl] + V_IND[j][k][1][bl] + V_IND[j][k][2][bl]));
                     }
                 }
-                vector<double> V_ind_perf(3, 0.0f);
-                vector<double> res_perf = bsl_perf(positions_old, Trail_circulation, 0, bl, ir, V_ind_perf);
+                vector<float> V_ind_perf(3, 0.0f);
+                vector<float> res_perf = bsl_perf(positions_old, Trail_circulation, 0, bl, ir, V_ind_perf);
                 for (int k = 0; k < 3; k++)
                 {
                     Blade_velocities[ir][k][bl] = res_perf[k];
@@ -641,21 +655,32 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
                         V_IND[j][i][1][bl] = V_IND[j][i][0][bl];
                     }
                 }
-                const double theta_equation = (theta[ir] + theta_1c * cos(psi) + theta_1s * sin(psi));
+                if (bl == ir && bl == 0)
+                {
+                    cout << "Blade_velocities: " << Blade_velocities[ir][0][bl] << ", " << Blade_velocities[ir][1][bl] << ", " << Blade_velocities[ir][2][bl] << std::endl;
+                }
+                const float theta_equation = (theta[ir] + theta_1c * cos(psi) + theta_1s * sin(psi));
 
-                const double Up = abs(Blade_velocities[ir][2][bl]) + u_inf * sin(alpha) + u_inf * sin(beta) * cos(psi); // - abs(Vv * (1 + sin(10 * psi)))
+                const float Up = abs(Blade_velocities[ir][2][bl]) + u_inf * sin(alpha) + u_inf * sin(beta) * cos(psi); // - abs(Vv * (1 + sin(10 * psi)))
+                /*if (bl == ir && bl == 0)
+                {
+                    cout << "Blade_velocities: " << Blade_velocities[ir][2][bl] << ", u_inf: " << u_inf << ", alpha: " << alpha << ", beta" << beta << ", psi: " << psi << std::endl;
+                }*/
                     // Up = PTC_inflow_array[ir] * omega * R_tip + u_inf * sin(alpha) + u_inf * sin(beta) * cos(psi)  #  - abs(Vv * (1 + sin(10 * psi)))
 
-                const double Ut = OMEGA * radii[ir] + u_inf * cos(alpha) * sin(psi);
+                const float Ut = OMEGA * radii[ir] + u_inf * cos(alpha) * sin(psi);
                 Up_VM_arr[az_index][ir] = Up;
-                const double L_bar = 0.5 * rho * chord[ir] * a * (theta_equation - atan(abs(Up) / Ut)) * (pow(Up, 2) + pow(Ut, 2)); // filling the  corresponding array
-
-                const double dDi = 0.5 * rho * chord[ir] * a * (theta_equation - atan(Up / Ut)) * Up * Ut; // Di term in induced torque equation
-                const double dDo = 0.5 * rho * Ut * Ut * chord[ir] * (Cd0); // Do term in  profile torque equation
-                const double dQi = dDi * radii[ir];
-                const double dQo = dDo * radii[ir];
-                const double dRM = L_bar * radii[ir] * sin(abs(psi));
-                const double dPM = 1 * L_bar * radii[ir] * cos(psi);
+                const float L_bar = 0.5 * rho * chord[ir] * a * (theta_equation - atan(abs(Up) / Ut)) * (pow(Up, 2) + pow(Ut, 2)); // filling the  corresponding array
+                /*if (bl == ir && bl == 0)
+                {
+                    cout << "rho: " << rho << ", chord: " << chord[ir] << ", a: " << a << ", theta_equation" << theta_equation << ", atan(abs(Up) / Ut): " << atan(abs(Up) / Ut) << ", Up: " << Up << ", Ut: " << Ut << ", L_bar: " << L_bar << ", radius: " << radii[ir] << std::endl;
+                }*/
+                const float dDi = 0.5 * rho * chord[ir] * a * (theta_equation - atan(Up / Ut)) * Up * Ut; // Di term in induced torque equation
+                const float dDo = 0.5 * rho * Ut * Ut * chord[ir] * (Cd0); // Do term in  profile torque equation
+                const float dQi = dDi * radii[ir];
+                const float dQo = dDo * radii[ir];
+                const float dRM = L_bar * radii[ir] * sin(abs(psi));
+                const float dPM = 1 * L_bar * radii[ir] * cos(psi);
 
                 for (int j = 1; j < JM; j++)
                 {
@@ -678,8 +703,8 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
                 Trail_circulation[1][ir][bl][1] = CirVM_array[0][ir][bl][1] - CirVM_array[0][ir + 1][bl][1];
                 Trail_circulation[0][ir][bl][1] = CirVM_array[0][ir][bl][1];
 
-                const double dPi = dDi * Ut; // filling the  corresponding array
-                const double dPo = dDo * Ut;
+                const float dPi = dDi * Ut; // filling the  corresponding array
+                const float dPo = dDo * Ut;
 
                 Radial_dT_array[ir][bl] = L_bar;
                 Radial_dOPi_array[ir][bl] = dPi;
@@ -723,7 +748,7 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
         {
             //cout << std::endl;
             Rotation_count += 1;
-            vector<vector<double>> Change_arr(JM, vector<double>(3));
+            vector<vector<float>> Change_arr(JM, vector<float>(3));
             for (int j = 0; j < JM; j++)
             {
                 for (int k = 0; k < 3; k++)
@@ -731,7 +756,7 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
                     Change_arr[j][k] = positions_new[j][span_sections - 1][k][N_BLADES - 1] - positions_compare[j][span_sections - 1][k][N_BLADES - 1];
                 }
             }
-            double shift_sum = 0;
+            float shift_sum = 0;
             /*dx2_dy2_dz2 = np.square(Change_array);
             dx2_dy2_dz2_sum = dx2_dy2_dz2[:, 0] + dx2_dy2_dz2[:, 1] + dx2_dy2_dz2[:, 2];*/
             for (int s = 0; s < JM; s++)
@@ -743,14 +768,22 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
             }
             // Eucladian_distance = np.sqrt(dx2_dy2_dz2[:, 0] + dx2_dy2_dz2[:, 1] + dx2_dy2_dz2[:, 2]);
             //shift_sum = np.sum(dx2_dy2_dz2_sum);
-            const double err1 = sqrt(shift_sum / JM);
+            const float err1 = sqrt(shift_sum / JM);
             rms_change = err1 / R_tip;
 
             RMS_arr.push_back(rms_change);
 
+            vector<float>Thrust_new(N_ROTORS, 0.0f);
+            vector<float>Induced_Power(N_ROTORS, 0.0f);
+            vector<float>Profile_Power(N_ROTORS, 0.0f);
+            vector<float>Power_new(N_ROTORS, 0.0f);
+            vector<float>Torque_new(N_ROTORS, 0.0f);
+            vector<float>OPM_new(N_ROTORS, 0.0f);
+            vector<float>ORM_new(N_ROTORS, 0.0f);
+
             for (int by = 0; by < N_BLADES; by++)
             {
-                int nx = by <= BLADES_PER_ROTOR ? 0 : 1;
+                int nx = by < BLADES_PER_ROTOR ? 0 : 1;
                 Thrust_new[nx] = Thrust_new[nx] + trapz(Azimuthal_dT_array, by, psi_array);
                 Induced_Power[nx] = Induced_Power[nx] + (trapz(Azimuthal_dOPi_array, by, psi_array));
                 Profile_Power[nx] = Profile_Power[nx] + (trapz(Azimuthal_dOPo_array, by, psi_array));
@@ -760,13 +793,13 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
                 ORM_new[nx] = ORM_new[nx] + trapz(Azimuthal_RM_array, by, psi_array);
             }
 
-            vector<vector<double>>Azimuthal_dT_array(N, vector<double>(N_BLADES, 0.0f));
-            vector<vector<double>>Azimuthal_dOPi_array(N, vector<double>(N_BLADES, 0.0f));
-            vector<vector<double>>Azimuthal_dOPo_array(N, vector<double>(N_BLADES, 0.0f));
-            vector<vector<double>>Azimuthal_PM_array(N, vector<double>(N_BLADES, 0.0f));
-            vector<vector<double>>Azimuthal_RM_array(N, vector<double>(N_BLADES, 0.0f));
-            vector<vector<double>>Azimuthal_dOQo_array(N, vector<double>(N_BLADES, 0.0f));
-            vector<vector<double>>Azimuthal_dOQi_array(N, vector<double>(N_BLADES, 0.0f));
+            vector<vector<float>>Azimuthal_dT_array(N, vector<float>(N_BLADES, 0.0f));
+            vector<vector<float>>Azimuthal_dOPi_array(N, vector<float>(N_BLADES, 0.0f));
+            vector<vector<float>>Azimuthal_dOPo_array(N, vector<float>(N_BLADES, 0.0f));
+            vector<vector<float>>Azimuthal_PM_array(N, vector<float>(N_BLADES, 0.0f));
+            vector<vector<float>>Azimuthal_RM_array(N, vector<float>(N_BLADES, 0.0f));
+            vector<vector<float>>Azimuthal_dOQo_array(N, vector<float>(N_BLADES, 0.0f));
+            vector<vector<float>>Azimuthal_dOQi_array(N, vector<float>(N_BLADES, 0.0f));
 
 
             cout << Rotation_count << " " << round_(rms_change, 5) << " " << round_(sumVecElem(Thrust_new), 3) << " " << round_(sumVecElem(scalarMul(0.001, Induced_Power)), 3) << " " << round_(sumVecElem(scalarMul(0.001, Profile_Power)), 3) << " " << round_(sumVecElem(scalarMul(0.001, Power_new)), 3) << " " << round_(sumVecElem(Torque_new), 2) << " " << round_(sumVecElem(OPM_new), 2) << " " << round_(sumVecElem(ORM_new), 2) << std::endl;
@@ -784,6 +817,7 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
     {
         cout << nx + 1 << " " << round_(Thrust_new[nx], 3) << " " << round_(Induced_Power[nx], 3) << " " << round_(Profile_Power[nx], 3) << " " << round_(Induced_Power[nx] + Profile_Power[nx], 3);
     }
+    saveData(positions_new, "fvw");
     //return positions_new, RMS_arr, CirVM_array, Thrust_new, Power_new, Blade_velocities, Thrust_contours, Shed_circulation, Trail_circulation, Up_VM_arr;
 }
 
@@ -791,23 +825,23 @@ void EX2BMethod(const double& CT, vector<vector<double>>& circulation)
 int main()
 {
     auto start = std::chrono::high_resolution_clock::now();
-    vector<double> wake_age_array = linspace(0, JM * dpsi * 180 / M_PI, JM);
+    vector<float> wake_age_array = linspace(0, JM * dpsi * 180 / M_PI, JM);
 
-    vector<double> psi_array = linspace(0, 2 * M_PI, N);
-    const double location = R_hub;
-    vector<double> PTC_inflow_arr(span_sections);
-    vector<double> location_arr;
+    vector<float> psi_array = linspace(0, 2 * M_PI, N);
+    const float location = R_hub;
+    vector<float> PTC_inflow_arr(span_sections);
+    vector<float> location_arr;
 
     //cout << "JM: " << JM << ", FAR_FIELD_CUTOFF: " << FAR_FIELD_CUTOFF << std::endl;
 
     for (int i = 0; i < span_sections; i++)
     {
-        double diff = 1.0f;
-        double lmd_1 = 1.0f;
+        float diff = 1.0f;
+        float lmd_1 = 1.0f;
         while (diff > 0.001)
         {
-            double f = 0.5 * N_BLADES * (1 - radii[i] / R_tip) / lmd_1;
-            double FL;
+            float f = 0.5 * N_BLADES * (1 - radii[i] / R_tip) / lmd_1;
+            float FL;
             if (f < 0.00001)
             {
                 FL = (2 / M_PI) * std::acos(std::exp(-0.00001));
@@ -816,7 +850,7 @@ int main()
             {
                 FL = (2 / M_PI) * std::acos(std::exp(-f));
             }
-            double lmd_2 = std::sqrt(pow((a * solidity[i] / (16 * FL)) - (0.5 * lc), 2) +
+            float lmd_2 = std::sqrt(pow((a * solidity[i] / (16 * FL)) - (0.5 * lc), 2) +
                 ((solidity[i] * a * theta[i] * radii[i]) / (FL * 8 * R_tip))) -
                 ((a * solidity[i] / (16 * FL)) - 0.5 * lc);
             //cout << "lmd_2 term 1 part 1: " << pow((a * solidity[i] / (16 * FL)) - 0.5 * lc, 2)
@@ -832,102 +866,102 @@ int main()
         }
         PTC_inflow_arr[i] = lmd_1;
     }
-    vector<double> phi_array = scalarMul(R_tip, vectorDiv(PTC_inflow_arr, radii));
+    vector<float> phi_array = scalarMul(R_tip, vectorDiv(PTC_inflow_arr, radii));
     std::transform(phi_array.begin(), phi_array.end(), phi_array.begin(), arctan);
-    vector<double> alpha_arr = vectorSub(theta, phi_array);
-    vector<double> Cd_arr(alpha_arr);
+    vector<float> alpha_arr = vectorSub(theta, phi_array);
+    vector<float> Cd_arr(alpha_arr);
     std::transform(Cd_arr.begin(), Cd_arr.end(), Cd_arr.begin(), square);
     Cd_arr = scalarAdd(Cd0, scalarMul(1.25, Cd_arr));
-    vector<double> Cl_arr = scalarMul(a, alpha_arr);
-    vector<double> circulation_ = scalarMul(0.5f, elementWiseMul(scalarAdd(u_inf * std::cos(alpha) * std::sin(M_PI / 2), scalarMul(OMEGA, radii)), elementWiseMul(chord, Cl_arr)));
-    vector<double> circulation_old = circulation_;
+    vector<float> Cl_arr = scalarMul(a, alpha_arr);
+    vector<float> circulation_ = scalarMul(0.5f, elementWiseMul(scalarAdd(u_inf * std::cos(alpha) * std::sin(M_PI / 2), scalarMul(OMEGA, radii)), elementWiseMul(chord, Cl_arr)));
+    vector<float> circulation_old = circulation_;
 
-    const double gamma_max = *std::max_element(circulation_.begin(), circulation_.end());
-    vector<double> Thrust2_arr = vector<double>(span_sections, 0.0f);
-    vector<double> Power2_arr = vector<double>(span_sections, 0.0f);
-    vector<double> UP_arr = vector<double>(span_sections, 0.0f);
-    const double T_a = 0.5 * rho * BLADES_PER_ROTOR; // constant part in thrust equation
-    vector<double> Ut_arr = scalarMul(OMEGA, radii);
+    const float gamma_max = *std::max_element(circulation_.begin(), circulation_.end());
+    vector<float> Thrust2_arr = vector<float>(span_sections, 0.0f);
+    vector<float> Power2_arr = vector<float>(span_sections, 0.0f);
+    vector<float> UP_arr = vector<float>(span_sections, 0.0f);
+    const float T_a = 0.5 * rho * BLADES_PER_ROTOR; // constant part in thrust equation
+    vector<float> Ut_arr = scalarMul(OMEGA, radii);
     for (int i = 0; i < span_sections; i++)
     {
-        const double Ut = OMEGA * radii[i];  // tangential velocity
-        const double Up = PTC_inflow_arr[i] * OMEGA * R_tip;  // perpendicular velocity
-        const double Cd = Cd0 + 1.25 * pow(theta[i] - atan(Up / Ut), 2);  // drag equation in terms of r
-        const double Cl = a * (theta[i] - atan(Up / Ut));  // lift equation in terms of r
+        const float Ut = OMEGA * radii[i];  // tangential velocity
+        const float Up = PTC_inflow_arr[i] * OMEGA * R_tip;  // perpendicular velocity
+        const float Cd = Cd0 + 1.25 * pow(theta[i] - atan(Up / Ut), 2);  // drag equation in terms of r
+        const float Cl = a * (theta[i] - atan(Up / Ut));  // lift equation in terms of r
 
-        const double dT = 0.5 * rho * N_BLADES * (pow(Up, 2) + pow(Ut, 2)) * chord[i] * (Cl * cos(atan(Up / Ut)) - Cd * sin(atan(Up / Ut)));
-        const double dP = 0.5 * rho * N_BLADES * OMEGA * radii[i] * (pow(Up, 2) + pow(Ut, 2)) * chord[i] * (Cd * cos(atan(Up / Ut)) + Cl * sin(atan(Up / Ut)));
+        const float dT = 0.5 * rho * N_BLADES * (pow(Up, 2) + pow(Ut, 2)) * chord[i] * (Cl * cos(atan(Up / Ut)) - Cd * sin(atan(Up / Ut)));
+        const float dP = 0.5 * rho * N_BLADES * OMEGA * radii[i] * (pow(Up, 2) + pow(Ut, 2)) * chord[i] * (Cd * cos(atan(Up / Ut)) + Cl * sin(atan(Up / Ut)));
         Thrust2_arr[i] = dT;
         Power2_arr[i] = dP;
         UP_arr[i] = Up;
     }
-    const double Thrust = trapz(Thrust2_arr, radii) / cos(alpha);
-    const double Power = trapz(Power2_arr, radii) / cos(alpha);
-    const double CT_A1 = Thrust / (rho * DISC_AREA * pow(OMEGA * R_tip, 2));
-    double CP = Power / (rho * DISC_AREA * pow(OMEGA * R_tip, 2));
-    vector<double> circulation_A1 = scalarMul(0.5, elementWiseMul(Cl_arr, elementWiseMul(chord, Ut_arr)));
+    const float Thrust = trapz(Thrust2_arr, radii) / cos(alpha);
+    const float Power = trapz(Power2_arr, radii) / cos(alpha);
+    const float CT_A1 = Thrust / (rho * DISC_AREA * pow(OMEGA * R_tip, 2));
+    float CP = Power / (rho * DISC_AREA * pow(OMEGA * R_tip, 2));
+    vector<float> circulation_A1 = scalarMul(0.5, elementWiseMul(Cl_arr, elementWiseMul(chord, Ut_arr)));
 
-    const double LHS = CT_A1 / N_ROTORS;
-    double il = 0.01f; // initial guess for Newton Raphson method
+    const float LHS = CT_A1 / N_ROTORS;
+    float il = 0.01f; // initial guess for Newton Raphson method
 
     for (int i = 0; i < 1000; i++)
     {
-        const double h = -h1_ig(il, LHS, mu, alpha) / h2_ig(il, LHS, mu, alpha);
+        const float h = -h1_ig(il, LHS, mu, alpha) / h2_ig(il, LHS, mu, alpha);
         il += h;
     }
-    const double L_ig_calculated = il;
+    const float L_ig_calculated = il;
     //cout << "L_ig_calculated: " << L_ig_calculated << std::endl;
-    //const double LG = L_ig_calculated + L_i;
-    vector<double> dOPM_array(N, 0.0f);
-    vector<double> dORM_array(N, 0.0f);
-    vector<double> dT_blade_array(N, 0.0f);
-    vector<double> dOQi_array(N, 0.0f);
-    vector<double> dOQo_array(N, 0.0f);
-    vector<double> dT_array(N, 0.0f);
-    vector<double> dOPi_array(N, 0.0f);
-    vector<double> dOPo_array(N, 0.0f);
+    //const float LG = L_ig_calculated + L_i;
+    vector<float> dOPM_array(N, 0.0f);
+    vector<float> dORM_array(N, 0.0f);
+    vector<float> dT_blade_array(N, 0.0f);
+    vector<float> dOQi_array(N, 0.0f);
+    vector<float> dOQo_array(N, 0.0f);
+    vector<float> dT_array(N, 0.0f);
+    vector<float> dOPi_array(N, 0.0f);
+    vector<float> dOPo_array(N, 0.0f);
 
-    const double dbeta_dt = 0;  // TPP as a reference frame
-    const double beta_o_d = 0;  // TPP frame of reference # beta   in degrees
-    const double beta_1s_d = 0;  // beta_1s kept 0 or as pilot input in degrees
-    const double beta_1c_d = 0;  // beta_1c kept 0 pilot input  degrees
-    const double theta_1s = (0) * (M_PI / 180);  // theta_1s  in degrees at trim conditio
-    const double theta_1c = (0) * (M_PI / 180);  // theta_1c  in degrees at trim conditio
-    vector<vector<double>> Thrust_plot_array(N + 1, vector<double>(span_sections, 0.0f));
-    vector<vector<double>> circulation(JM, vector<double>(span_sections, 0.0f));
-    vector<vector<double>> Up_BEM_array(N, vector<double>(span_sections, 0.0f));
+    const float dbeta_dt = 0;  // TPP as a reference frame
+    const float beta_o_d = 0;  // TPP frame of reference # beta   in degrees
+    const float beta_1s_d = 0;  // beta_1s kept 0 or as pilot input in degrees
+    const float beta_1c_d = 0;  // beta_1c kept 0 pilot input  degrees
+    const float theta_1s = (0) * (M_PI / 180);  // theta_1s  in degrees at trim conditio
+    const float theta_1c = (0) * (M_PI / 180);  // theta_1c  in degrees at trim conditio
+    vector<vector<float>> Thrust_plot_array(N + 1, vector<float>(span_sections, 0.0f));
+    vector<vector<float>> circulation(JM, vector<float>(span_sections, 0.0f));
+    vector<vector<float>> Up_BEM_array(N, vector<float>(span_sections, 0.0f));
 
     for (int j = 0; j < N; j++)
     {
-        const double beta = (beta_o_d + beta_1c_d * cos(j * dpsi) + beta_1s_d * sin(j * dpsi)) * (M_PI / 180);  // beta
+        const float beta = (beta_o_d + beta_1c_d * cos(j * dpsi) + beta_1s_d * sin(j * dpsi)) * (M_PI / 180);  // beta
         // arrays to store sectional Lift, induced & profile Torque, induced & profile Power at each radial location
-        vector<double> dL_array(span_sections, 0.0f);
-        vector<double> dP_array(span_sections, 0.0f);
-        vector<double> dR_array(span_sections, 0.0f);
-        vector<double> dQi_array(span_sections, 0.0f);
-        vector<double> dQo_array(span_sections, 0.0f);
-        vector<double> dPi_array(span_sections, 0.0f);
-        vector<double> dPo_array(span_sections, 0.0f);
+        vector<float> dL_array(span_sections, 0.0f);
+        vector<float> dP_array(span_sections, 0.0f);
+        vector<float> dR_array(span_sections, 0.0f);
+        vector<float> dQi_array(span_sections, 0.0f);
+        vector<float> dQo_array(span_sections, 0.0f);
+        vector<float> dPi_array(span_sections, 0.0f);
+        vector<float> dPo_array(span_sections, 0.0f);
 
         for (int i = 0; i < span_sections; i++) // loop to solve the dL, dQi, dQo, dPi, dPo, dPM, dRM
         {
-            double inr = 0.0f;
-            double difference = 1.0f;
+            float inr = 0.0f;
+            float difference = 1.0f;
             while (difference > 0.001f)
             {
-                const double h = -h1_i(inr, L_ig_calculated, mu, j * dpsi, radii[i], R_tip) / h2_i(inr, L_ig_calculated, mu, j * dpsi, radii[i], R_tip);
+                const float h = -h1_i(inr, L_ig_calculated, mu, j * dpsi, radii[i], R_tip) / h2_i(inr, L_ig_calculated, mu, j * dpsi, radii[i], R_tip);
                 //cout << h1_i(inr, L_ig_calculated, mu, j * dpsi, radii[i], R_tip) << " " << h2_i(inr, L_ig_calculated, mu, j * dpsi, radii[i], R_tip) << ", ";
                 difference = abs(h);
                 inr = inr + h;
             }
             //cout << std::endl;
-            const double L_i_calculated = inr; // calculated value of L_i (inflow ratio) at given radial location
+            const float L_i_calculated = inr; // calculated value of L_i (inflow ratio) at given radial location
 
-            const double theta_equation = (theta[i] + theta_1c * cos(j * dpsi) + theta_1s * sin(j * dpsi));  // theta in tersm of r i.e.theta_twd = E + Fr
+            const float theta_equation = (theta[i] + theta_1c * cos(j * dpsi) + theta_1s * sin(j * dpsi));  // theta in tersm of r i.e.theta_twd = E + Fr
             /*cout << "u_inf: " << u_inf << ", alpha: " << alpha << ", L_i_calculated: " << L_i_calculated << ", Vv: " << Vv << ", radii[i]" << radii[i] <<
                 ", dbeta_dt:" << dbeta_dt << ", beta: " << beta << ", j*dpsi" << j*dpsi << std::endl;*/
-            const double Up = u_inf * sin((alpha)) + (OMEGA * R_tip * (L_i_calculated)+Vv) + radii[i] * dbeta_dt + u_inf * sin(beta) * cos(j * dpsi);
-            const double Ut = OMEGA * radii[i] + u_inf * cos(alpha) * sin(j * dpsi);
+            const float Up = u_inf * sin((alpha)) + (OMEGA * R_tip * (L_i_calculated)+Vv) + radii[i] * dbeta_dt + u_inf * sin(beta) * cos(j * dpsi);
+            const float Ut = OMEGA * radii[i] + u_inf * cos(alpha) * sin(j * dpsi);
 
             Up_BEM_array[j][i] = Up;
 
@@ -937,10 +971,10 @@ int main()
             dP_array[i] = dL_array[i] * radii[i] * cos(j * dpsi);  // filling the  corresponding array
             dR_array[i] = dL_array[i] * radii[i] * sin(j * dpsi);  // filling the  corresponding array
 
-            const double dDi = 0.5 * rho * chord[i] * a * (theta_equation - atan(Up / Ut)) * Up * Ut; // Di term in induced torque equation
+            const float dDi = 0.5 * rho * chord[i] * a * (theta_equation - atan(Up / Ut)) * Up * Ut; // Di term in induced torque equation
             dQi_array[i] = dDi * radii[i]; // filling the  corresponding array
 
-            const double dDo = 0.5 * rho * Ut * Ut * chord[i] * (Cd0); // Do term in  profile torque equation
+            const float dDo = 0.5 * rho * Ut * Ut * chord[i] * (Cd0); // Do term in  profile torque equation
             dQo_array[i] = dDo * radii[i]; // filling the  corresponding array
 
             dPi_array[i] = dDi * Ut; // filling the  corresponding array
@@ -959,18 +993,18 @@ int main()
         dOPo_array[j] = trapz(dPo_array, radii); // profile power at given azimuthal location
     }
 
-    const double THRUST = trapz(dT_array, psi_array) * (N_BLADES / (2 * M_PI)); // thust produced at given azimuthal location
+    const float THRUST = trapz(dT_array, psi_array) * (N_BLADES / (2 * M_PI)); // thust produced at given azimuthal location
 
-    const double OVERALL_PITCHING_MOMENT = trapz(dOPM_array, psi_array) * (N_BLADES / (2 * M_PI));   // Overall Pitching Moment produced by rotor
-    const double OVERALL_ROLLING_MOMENT = trapz(dORM_array, psi_array) * (N_BLADES / (2 * M_PI));  // Overall Rolling Moment produced by rotor
-    const double INDUCED_TORQUE = trapz(dOQi_array, psi_array) * (N_BLADES / (2 * M_PI)); // Induced Torque produced by rotor
-    const double PROFILE_TORQUE = trapz(dOQo_array, psi_array) * (N_BLADES / (2 * M_PI)); // Profile Torque produced by rotor
+    const float OVERALL_PITCHING_MOMENT = trapz(dOPM_array, psi_array) * (N_BLADES / (2 * M_PI));   // Overall Pitching Moment produced by rotor
+    const float OVERALL_ROLLING_MOMENT = trapz(dORM_array, psi_array) * (N_BLADES / (2 * M_PI));  // Overall Rolling Moment produced by rotor
+    const float INDUCED_TORQUE = trapz(dOQi_array, psi_array) * (N_BLADES / (2 * M_PI)); // Induced Torque produced by rotor
+    const float PROFILE_TORQUE = trapz(dOQo_array, psi_array) * (N_BLADES / (2 * M_PI)); // Profile Torque produced by rotor
 
-    const double TOTAL_TORQUE = INDUCED_TORQUE + PROFILE_TORQUE; // Total Torque produced by rotor
+    const float TOTAL_TORQUE = INDUCED_TORQUE + PROFILE_TORQUE; // Total Torque produced by rotor
 
-    const double INDUCED_POWER = trapz(dOPi_array, psi_array) * (N_BLADES / (2 * M_PI)); // Induced Power produced by rotor
-    const double PROFILE_POWER = trapz(dOPo_array, psi_array) * (N_BLADES / (2 * M_PI)); // Profile Power produced by rotor
-    const double TOTAL_POWER = (INDUCED_POWER)+PROFILE_POWER; // Total Power produced by rotor
+    const float INDUCED_POWER = trapz(dOPi_array, psi_array) * (N_BLADES / (2 * M_PI)); // Induced Power produced by rotor
+    const float PROFILE_POWER = trapz(dOPo_array, psi_array) * (N_BLADES / (2 * M_PI)); // Profile Power produced by rotor
+    const float TOTAL_POWER = (INDUCED_POWER)+PROFILE_POWER; // Total Power produced by rotor
 
     cout << ">>>>>>>>>>>>  RESULTS  <<<<<<<<<<<<" << std::endl;
     cout << "Thrust at Trim condition (N):" << (round(THRUST * 1000.0) / 1000.0) << std::endl;
@@ -984,18 +1018,18 @@ int main()
     cout << "Profile Power (kW):" << (round(PROFILE_POWER * 0.001 * 1000.0) / 1000.0) << std::endl;
     cout << "Total Power (kW):" << (round(TOTAL_POWER * 0.001 * 1000.0) / 1000.0) << std::endl;
 
-    const double CT = THRUST / (rho * DISC_AREA * pow(OMEGA * R_tip, 2));  // Thrust co efficient 
+    const float CT = THRUST / (rho * DISC_AREA * pow(OMEGA * R_tip, 2));  // Thrust co efficient 
     CP = TOTAL_POWER / (rho * DISC_AREA * pow(OMEGA * R_tip, 3));  // Thrust co efficient 
     cout << "ThrustA2:" << round(Thrust * 1000.0) / 1000.0 << "N and CT:" << CT << std::endl;
     cout << "PowerA2:" << round(Power) / 1000.0 << "kW and CP:" << CP << std::endl;
     cout << "Thrust:" << round(THRUST * 1000.0) / 1000.0 << "N and CT:" << CT << std::endl;
     cout << "Power:" << round(TOTAL_POWER) / 1000.0 << "kW and CP:" << CP << std::endl;
 
-    //const double THRUST_ = 8786.417;
-    //const double CT_ = THRUST / (rho * DISC_AREA * pow(OMEGA * R_tip, 2));
-    vector< vector<vector<vector<double>>>> hoverWakerSoln = HoverWake(CT);
+    //const float THRUST_ = 8786.417;
+    //const float CT_ = THRUST / (rho * DISC_AREA * pow(OMEGA * R_tip, 2));
+    vector< vector<vector<vector<float>>>> hoverWakerSoln = HoverWake(CT);
     //save4DArray(hoverWakerSoln, "hover_wake_sol.npy");
-    saveData(hoverWakerSoln);
+    saveData(hoverWakerSoln, "prescribed_wake");
     //std::cout << "JM: " << JM;
     //std::cout << "CT: " << CT;
     //std::cout << "dpsi: " << dpsi;
